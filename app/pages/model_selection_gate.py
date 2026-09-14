@@ -211,6 +211,9 @@ Dense (10, Softmax)""",
             st.warning("models/cnn.keras não foi encontrado.")
             return
 
+        if not st.button("Render architecture", key="render_cnn_architecture"):
+            return
+
         try:
             import visualkeras
             from tensorflow import keras
@@ -228,7 +231,7 @@ Dense (10, Softmax)""",
                 st.image(
                     image,
                     caption="CNN selected architecture — VisualKeras",
-                    use_container_width=True,
+                    width="stretch",
                 )
             except Exception as visual_exc:
                 st.warning(

@@ -84,7 +84,7 @@ class Predictor:
 
         elif model_name in {"mlp", "cnn"}:
             self.model = keras.models.load_model(
-                MODELS_DIR / f"{model_name}.keras"
+                MODELS_DIR / f"{model_name}.keras", compile=False
             )
 
         else:

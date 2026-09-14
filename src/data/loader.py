@@ -1,10 +1,11 @@
 import numpy as np
-from tensorflow.keras.datasets import fashion_mnist
 
 from config.settings import RANDOM_STATE
 
 
 def load_fashion_mnist():
+    from tensorflow.keras.datasets import fashion_mnist
+
     return fashion_mnist.load_data()
 
 

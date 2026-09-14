@@ -1,5 +1,6 @@
 import base64
 import io
+import os
 from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
@@ -16,7 +17,7 @@ from src.acquisition.contracts import InferenceInput
 # CONFIGURATION
 # ============================================================
 
-API_URL = "http://localhost:8000"
+API_URL = os.environ.get("INFERENCE_API_URL", "").rstrip("/")
 
 MODEL_OPTIONS = [
     "cnn",
@@ -52,7 +53,7 @@ def _render_inference_context() -> None:
         Nesta página, a análise passa para o nível de uma
         **predição individual**.
 
-        A imagem enviada é processada pela **FastAPI**, que aplica
+        A imagem enviada é processada pelo serviço de inferência, que aplica
         o preprocessing selecionado, executa o modelo e retorna
         a classificação juntamente com indicadores de incerteza.
         """
@@ -228,6 +229,13 @@ def _render_input_preview(
 # API REQUEST
 # ============================================================
 
+@st.cache_resource(max_entries=3)
+def _local_predictor(model: str):
+    from src.inference.predictor import Predictor
+
+    return Predictor(model_name=model, preprocessing_mode="raw")
+
+
 def _request_prediction(
     uploaded: _InputFile,
     model: str,
@@ -236,6 +244,18 @@ def _request_prediction(
     """
     Envia a imagem à FastAPI e retorna o resultado.
     """
+
+    if not API_URL:
+        from copy import copy
+
+        # Share model weights, but keep preprocessing settings per request.
+        predictor = copy(_local_predictor(model))
+        predictor.preprocessing_mode = preprocessing
+        with Image.open(io.BytesIO(uploaded.getvalue())) as image:
+            return predictor.predict(
+                image, top_k=10,
+                input_representation=uploaded.representation,
+            )
 
     response = requests.post(
         f"{API_URL}/predict",
@@ -663,6 +683,11 @@ def _render_serving_layer() -> None:
     Posiciona FastAPI dentro da arquitetura MLOps.
     """
 
+    if not API_URL:
+        st.subheader("Serving Layer")
+        st.write("O modelo executa diretamente no aplicativo, com pesos carregados em cache.")
+        return
+
     st.subheader(
         "Serving Layer"
     )
@@ -713,6 +738,11 @@ def _render_mlops_perspective() -> None:
     """
     Conecta a página de inferência ao ciclo de MLOps.
     """
+
+    if not API_URL:
+        st.subheader("MLOps Perspective")
+        st.write("Esta versão usa os modelos já treinados e os resultados experimentais versionados. A API FastAPI permanece disponível para execução separada.")
+        return
 
     st.subheader(
         "MLOps Perspective"

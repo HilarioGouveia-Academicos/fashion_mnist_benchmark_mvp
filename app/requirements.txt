@@ -1,0 +1,15 @@
+# Streamlit Community Cloud runtime (Python 3.11).
+# Training/API dependencies remain in the root requirements.txt.
+streamlit==1.63.0
+tensorflow==2.21.0
+scikit-learn==1.9.0
+numpy==2.4.6
+pandas==2.3.3
+pillow==12.3.0
+opencv-python-headless==5.0.0.93
+matplotlib==3.11.1
+seaborn==0.13.2
+joblib==1.6.0
+visualkeras==0.2.0
+requests==2.34.2
+mlflow-skinny
