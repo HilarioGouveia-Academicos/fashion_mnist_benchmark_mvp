@@ -12,6 +12,7 @@ import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB = PROJECT_ROOT / "mlflow.db"
+SNAPSHOT_DB = PROJECT_ROOT / "deployment" / "mlflow.db"
 MLRUNS_ROOT = PROJECT_ROOT / "mlruns"
 EXPERIMENT_NAME = "Fashion-MNIST-Benchmark"
 
@@ -104,10 +105,11 @@ def _model_for_run(name: str, params: dict[str, str]) -> str:
 
 
 def _load_local_sqlite() -> tuple[pd.DataFrame, dict[str, dict[str, Any]], str]:
-    if not DEFAULT_DB.exists():
+    db_path = DEFAULT_DB if DEFAULT_DB.exists() else SNAPSHOT_DB
+    if not db_path.exists():
         return pd.DataFrame(), {}, "Local MLflow database not found."
 
-    con = sqlite3.connect(str(DEFAULT_DB))
+    con = sqlite3.connect(db_path.as_uri() + "?mode=ro", uri=True)
     try:
         exp = pd.read_sql_query(
             "SELECT experiment_id, name FROM experiments WHERE lifecycle_stage='active'",
@@ -158,7 +160,8 @@ def _load_local_sqlite() -> tuple[pd.DataFrame, dict[str, dict[str, Any]], str]:
             lambda row: _model_for_run(row["run_name"], details.get(row["run_id"], {}).get("params", {})), axis=1
         )
         runs["started_at"] = runs["start_time"].map(_fmt_time)
-        return runs, details, f"SQLite · {DEFAULT_DB.name}"
+        label = "Deployment snapshot (read-only)" if db_path == SNAPSHOT_DB else "SQLite (read-only)"
+        return runs, details, f"{label} · {db_path.name}"
     finally:
         con.close()
 
@@ -380,7 +383,8 @@ def render_experiment_evidence() -> None:
     st.markdown(
         """
         **Local development:** this page can read the bundled `mlflow.db` and local `mlruns/` artifacts.  
-        **Cloud deployment:** set `MLFLOW_TRACKING_URI` to a remote Tracking Server. Optionally set `MLFLOW_UI_URL`
+        **Cloud deployment:** the bundled database snapshot provides read-only experiment history.
+        A remote Tracking Server is optional via `MLFLOW_TRACKING_URI`. Optionally set `MLFLOW_UI_URL`
         to expose the **Open Full MLflow UI** button. The Streamlit page does not need the full MLflow UI to remain useful.
         """
     )

@@ -83,7 +83,9 @@ python -m mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
 
 A página **Experiment Evidence** consulta `mlflow.db` ou um servidor configurado pela variável `MLFLOW_TRACKING_URI`. A variável opcional `MLFLOW_UI_URL` aponta para a interface do MLflow.
 
-O banco local e os diretórios de execução não são enviados ao GitHub. Na nuvem, essa página precisa de um servidor MLflow remoto; sem ele, informa a ausência de evidências disponíveis. As páginas de resultados usam os CSVs versionados.
+O banco de treinamento na raiz e os diretórios de execução não são enviados ao GitHub. Na nuvem, a página consulta a cópia versionada em `deployment/mlflow.db`, aberta somente para leitura. Essa cópia preserva o histórico na data da exportação; não recebe novos experimentos automaticamente. Um servidor MLflow remoto é opcional.
+
+Para atualizar a cópia após novos treinamentos, execute `python tools/snapshot_mlflow.py` e envie `deployment/mlflow.db` em um novo commit. O script usa o backup do SQLite para criar uma cópia consistente e verifica sua integridade. Revise os metadados antes de publicar. Os arquivos de artefatos em `mlruns/` não fazem parte do banco e continuam fora do deploy.
 
 ## Publicar no Streamlit Community Cloud
 

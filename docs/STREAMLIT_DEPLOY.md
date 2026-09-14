@@ -15,8 +15,11 @@ FastAPI service. No API key is required for built-in inference.
 The three model files and the dashboard summary CSVs are versioned for deployment.
 Raw datasets, training runs, ZIP backups and the local MLflow database stay excluded.
 Fashion-MNIST is downloaded by Keras when the Dataset page is opened.
-Experiment Evidence requires the local MLflow database or a remote MLflow service;
-it displays an empty-state message when neither is available.
+Experiment Evidence reads the versioned `deployment/mlflow.db` snapshot when the
+local training database is absent. Both databases are opened read-only by the app.
+Refresh the snapshot with `python tools/snapshot_mlflow.py` after training, then
+commit the updated snapshot. This does not include files from `mlruns/` or start
+a tracking server. A remote MLflow service remains optional.
 
 Deploy from https://share.streamlit.io using the settings above. Keep the app's
 visibility aligned with the intended audience; a private repository alone does
