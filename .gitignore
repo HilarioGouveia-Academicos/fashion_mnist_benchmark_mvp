@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+/mlruns/
+/models/
+/artifacts/
+.streamlit/
+/data/
+*.zip
+/mlflow.db
+/mlflow.db-*
+.env
+.env.*
+!.env.example
+.pytest_cache/

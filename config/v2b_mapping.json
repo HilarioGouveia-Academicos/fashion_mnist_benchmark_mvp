@@ -1,0 +1,64 @@
+{
+  "dataset": "ashraq/fashion-product-images-small",
+  "seed": 42,
+  "target_per_class": 50,
+  "candidate_multiplier": 3,
+  "mapping": {
+    "Tshirts": {
+      "class_id": 0,
+      "class_name": "T-shirt/top",
+      "review": false
+    },
+    "Trousers": {
+      "class_id": 1,
+      "class_name": "Trouser",
+      "review": false
+    },
+    "Sweaters": {
+      "class_id": 2,
+      "class_name": "Pullover",
+      "review": true
+    },
+    "Sweatshirts": {
+      "class_id": 2,
+      "class_name": "Pullover",
+      "review": true
+    },
+    "Dresses": {
+      "class_id": 3,
+      "class_name": "Dress",
+      "review": false
+    },
+    "Jackets": {
+      "class_id": 4,
+      "class_name": "Coat",
+      "review": true
+    },
+    "Sandals": {
+      "class_id": 5,
+      "class_name": "Sandal",
+      "review": false
+    },
+    "Shirts": {
+      "class_id": 6,
+      "class_name": "Shirt",
+      "review": false
+    },
+    "Sports Shoes": {
+      "class_id": 7,
+      "class_name": "Sneaker",
+      "review": false
+    },
+    "Handbags": {
+      "class_id": 8,
+      "class_name": "Bag",
+      "review": false
+    }
+  },
+  "ankle_boot_candidate_article_types": [
+    "Casual Shoes",
+    "Formal Shoes",
+    "Heels",
+    "Flats"
+  ]
+}

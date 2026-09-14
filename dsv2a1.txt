@@ -1,0 +1,49 @@
+========================================
+DOMAIN SHIFT V2A.1
+CANONICALIZED EXTERNAL
+========================================
+
+RAW shape: (40, 28, 28)
+Canonical shape: (40, 28, 28)
+Canonical min/max: 0 / 255
+I0000 00:00:1788563610.228114    4884 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instrucnce-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX FMA, in other operations, rebuild TensorFlow with the appropriate c
+WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are instot be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+
+========================================
+Modelo: SVM
+========================================
+accuracy             = 0.4000
+f1_macro             = 0.3529
+mean_confidence      = 0.5779
+confidence_on_errors = 0.4877
+mean_entropy         = 1.2623
+
+========================================
+Modelo: MLP
+========================================
+accuracy             = 0.2500
+f1_macro             = 0.1916
+mean_confidence      = 0.5886
+confidence_on_errors = 0.5413
+mean_entropy         = 1.1685
+
+========================================
+Modelo: CNN
+========================================
+accuracy             = 0.4750
+f1_macro             = 0.4138
+mean_confidence      = 0.6843
+confidence_on_errors = 0.5492
+mean_entropy         = 0.8829
+[OK] Gráficos V2A.1 gerados.
+
+========================================
+RAW VS CANONICALIZED
+========================================
+model  raw_accuracy  canonical_accuracy  accuracy_gain  raw_error_confidence  canonical_error_confidence
+  svm         0.100               0.400           0.30              0.715885                    0.487745
+  mlp         0.050               0.250           0.20              0.877337                    0.541297
+  cnn         0.125               0.475           0.35              0.515824                    0.549243
+
+[OK] Domain Shift V2A.1 concluído.
